@@ -279,7 +279,18 @@ func restartNetwork() error {
 }
 
 func notify(msg string) {
-	exec.Command("notify-send", "Get Shit Done", msg).Run()
+	sudoUser := os.Getenv("SUDO_USER")
+	if sudoUser == "" {
+		sudoUser = os.Getenv("USER")
+	}
+
+	cmd := exec.Command("sudo", "-u", sudoUser, "DISPLAY=:0", "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus", "notify-send", "Get Shit Done", msg)
+	cmd.Env = append(os.Environ(),
+		"DISPLAY=:0",
+		"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus",
+	)
+
+	cmd.Run()
 }
 
 func exitWithError(msg string, code int) {
