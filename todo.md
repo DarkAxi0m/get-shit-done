@@ -1,6 +1,7 @@
 # Todo
 
 ## Main Todo
-
-## remove host changes on unintall
+- [ ] remove changed on uninstall
+- [ ] use short command gsd
+- [ ] update readme
 
