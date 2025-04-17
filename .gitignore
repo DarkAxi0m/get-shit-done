@@ -1,0 +1,25 @@
+# Go build artifacts
+/getshitdone
+*.exe
+*.out
+*.test
+
+# Debian packaging folders and output
+/getshitdone_*/
+*.deb
+
+# Man page artifacts
+*.1.gz
+
+# Backup files
+*.bak
+*~
+
+# Editor/project config
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+
+.init.sh

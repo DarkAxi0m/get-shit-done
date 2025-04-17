@@ -1,0 +1,83 @@
+.TH GETSHITDONE 1 "April 2025" "1.0.0" "User Commands"
+.SH NAME
+getshitdone \- toggle blocking of distracting websites using /etc/hosts
+.SH SYNOPSIS
+.B getshitdone
+[\fIcommand\fR] [\fIoptions\fR]
+.SH DESCRIPTION
+This tool adds or removes domain blocks from your /etc/hosts file.
+
+.SH COMMANDS
+.TP
+.B work
+Block domains listed in the INI file.
+.TP
+.B play
+Unblock previously blocked domains.
+.TP
+.B add \fIdomain\fR
+Add a domain to the block list.
+.TP
+.B remove \fIdomain\fR
+Remove a domain from the block list.
+.TP
+.B list
+List all domains currently configured.
+.TP
+.B status
+Show if 'work' mode is currently active.
+
+.SH OPTIONS
+.TP
+.B --config
+Specify an alternate INI file path.
+.TP
+.B --dry-run
+Print what would happen without applying changes.
+
+.SH FILES
+~/.config/get-shit-done.ini
+
+.SH AUTHOR
+Written by you.  "stolen" from https://github.com/viccherubini/get-shit-done
+
+.SH COPYRIGHT
+Released under the MIT License.
+
+APP_NAME = getshitdone
+VERSION = 1.0.0
+ARCH = amd64
+BIN_DIR = $(APP_NAME)_$(VERSION)/usr/local/bin
+DEBIAN_DIR = $(APP_NAME)_$(VERSION)/DEBIAN
+OUTPUT = $(APP_NAME)_$(VERSION).deb
+SRC = main.go
+
+all: build package
+
+build:
+	go build -o $(APP_NAME)
+
+prepare:
+	mkdir -p $(BIN_DIR) $(DEBIAN_DIR)
+	cp $(APP_NAME) $(BIN_DIR)/
+
+control:
+	echo "Package: $(APP_NAME)" > $(DEBIAN_DIR)/control
+	echo "Version: $(VERSION)" >> $(DEBIAN_DIR)/control
+	echo "Section: base" >> $(DEBIAN_DIR)/control
+	echo "Priority: optional" >> $(DEBIAN_DIR)/control
+	echo "Architecture: $(ARCH)" >> $(DEBIAN_DIR)/control
+	echo "Depends: bash" >> $(DEBIAN_DIR)/control
+	echo "Maintainer: You <you@example.com>" >> $(DEBIAN_DIR)/control
+	echo "Description: Toggle blocking of distracting domains using /etc/hosts" >> $(DEBIAN_DIR)/control
+
+package: build prepare control
+	dpkg-deb --build $(APP_NAME)_$(VERSION)
+	@echo "Created $(OUTPUT)"
+
+clean:
+	rm -rf $(APP_NAME) $(APP_NAME)_$(VERSION) $(OUTPUT)
+
+install: $(OUTPUT)
+	sudo dpkg -i $(OUTPUT)
+
