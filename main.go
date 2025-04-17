@@ -300,5 +300,5 @@ func exitWithError(msg string, code int) {
 }
 
 func printHelp() {
-	fmt.Println("Usage: get-shit-done [work|play|add|remove] [-config=path] [--dry-run] [--status]")
+	fmt.Println("Usage: get-shit-done [work|play|add|remove|status] [-config=path] [--dry-run]")
 }
