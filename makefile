@@ -1,5 +1,5 @@
 APP_NAME = getshitdone
-VERSION = 1.0.1
+VERSION := $(shell cat VERSION)
 ARCH = amd64
 
 BUILD_DIR = $(APP_NAME)_$(VERSION)
@@ -10,6 +10,8 @@ DEBIAN_DIR = $(BUILD_DIR)/DEBIAN
 OUTPUT = $(APP_NAME)_$(VERSION).deb
 
 SRC = main.go
+
+.PHONY: all build prepare control package clean install bump-patch bump-minor bump-major
 
 all: build package
 
@@ -41,4 +43,30 @@ clean:
 
 install: $(OUTPUT)
 	sudo dpkg -i $(OUTPUT)
+
+# ---- Version bumping and Git tagging ----
+
+bump-patch:
+	@ver=$$(awk -F. '{ $$3 += 1; print $$1 "." $$2 "." $$3 }' VERSION); \
+	echo "$$ver" > VERSION; \
+	git add VERSION; \
+	git commit -m "Bump version to $$ver"; \
+	git tag -a v$$ver -m "Version $$ver"; \
+	echo "Bumped patch to $$ver"
+
+bump-minor:
+	@ver=$$(awk -F. '{ $$2 += 1; $$3 = 0; print $$1 "." $$2 "." $$3 }' VERSION); \
+	echo "$$ver" > VERSION; \
+	git add VERSION; \
+	git commit -m "Bump version to $$ver"; \
+	git tag -a v$$ver -m "Version $$ver"; \
+	echo "Bumped minor to $$ver"
+
+bump-major:
+	@ver=$$(awk -F. '{ $$1 += 1; $$2 = 0; $$3 = 0; print $$1 "." $$2 "." $$3 }' VERSION); \
+	echo "$$ver" > VERSION; \
+	git add VERSION; \
+	git commit -m "Bump version to $$ver"; \
+	git tag -a v$$ver -m "Version $$ver"; \
+	echo "Bumped major to $$ver"
 
