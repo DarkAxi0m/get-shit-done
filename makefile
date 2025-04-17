@@ -1,5 +1,5 @@
 APP_NAME = getshitdone
-VERSION = 1.0.0
+VERSION = 1.0.1
 ARCH = amd64
 
 BUILD_DIR = $(APP_NAME)_$(VERSION)
@@ -29,7 +29,7 @@ control:
 	echo "Priority: optional" >> $(DEBIAN_DIR)/control
 	echo "Architecture: $(ARCH)" >> $(DEBIAN_DIR)/control
 	echo "Depends: bash" >> $(DEBIAN_DIR)/control
-	echo "Maintainer: You <you@example.com>" >> $(DEBIAN_DIR)/control
+	echo "Maintainer: Christopher Chase" >> $(DEBIAN_DIR)/control
 	echo "Description: Toggle /etc/hosts to block distractions (work/play/add/remove)." >> $(DEBIAN_DIR)/control
 
 package: build prepare control
